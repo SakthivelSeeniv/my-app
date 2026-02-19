@@ -1,3 +1,4 @@
+import os
 import pytest
 from playwright.sync_api import sync_playwright
 import time
@@ -36,7 +37,9 @@ def test_run(region,country,city):
         page.get_by_placeholder("Filter by keyword").fill("Sales")
         page.locator("(//a[text()=' Sales Dashboard '])[1]").click()
 
-        df = pd.read_excel("C:\\Users\\sakthivel.seeniv\\Downloads\\Excel_Test_Data.xlsx")
+        #df = pd.read_excel("C:\\Users\\sakthivel.seeniv\\Downloads\\Excel_Test_Data.xlsx")
+        file_path = os.path.join("testdata", "Excel_Test_Data.xlsx")
+        df = pd.read_excel(file_path)
         wb = Workbook()
         ws = wb.active
         ws.title = "Test Report"
@@ -92,7 +95,12 @@ def test_run(region,country,city):
         # check.equal(Decimal(str(totalSales)), Decimal(results[0][2]))
         # check.equal(Decimal(str(totalProfit)), Decimal(results[0][3]))
 
-        wb.save("C:\\Users\\sakthivel.seeniv\\Downloads\\Test_Result_Report.xlsx")
+        #wb.save("C:\\Users\\sakthivel.seeniv\\Downloads\\Test_Result_Report.xlsx")
+        report_dir = "reports"
+        os.makedirs(report_dir, exist_ok=True)
+
+        report_path = os.path.join(report_dir, "Test_Result_Report.xlsx")
+        wb.save(report_path)
 
         #page.screenshot(path="example.png")
         time.sleep(5)
