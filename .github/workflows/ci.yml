@@ -34,11 +34,15 @@ jobs:
         run: |
           pytest test_parameters_1.py --maxfail=1 --disable-warnings -v
 
-      - name: Upload Test Artifacts
+      - name: Upload Debug Screenshot
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: debug-screenshot
-          path: reports/debug.png
+          path: reports/*.png
 
+      - name: Upload Test Report
+        uses: actions/upload-artifact@v4
+        with:
           name: test-report
           path: reports/Test_Result_Report.xlsx
