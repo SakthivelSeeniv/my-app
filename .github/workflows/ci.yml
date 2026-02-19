@@ -27,6 +27,9 @@ jobs:
         run: |
           pip install -r requirements.txt
 
+      - name: Install Playwright Browsers
+        run: playwright install --with-deps
+
       - name: Run tests
         run: |
           pytest test_parameters_1.py --maxfail=1 --disable-warnings -v
