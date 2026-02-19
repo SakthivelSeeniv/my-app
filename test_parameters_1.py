@@ -20,8 +20,8 @@ import pytest_check as check
 # db= MySQLConnection()
 # db.setup_connection()
 
-@pytest.mark.parametrize("region,country,city",[("Asia","India","Mumbai"),("Asia","China","Beijing"),("Europe","Germain","Berlin")])
-def test_run(region,country,city):
+@pytest.mark.parametrize("region,country,city,row_no",[("Asia","India","Mumbai",1),("Asia","China","Beijing",2),("Europe","Germain","Berlin",3)])
+def test_run(region,country,city,row_no):
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)  # Set True for headless mode
         page = browser.new_page()
@@ -42,11 +42,10 @@ def test_run(region,country,city):
         df = pd.read_excel(file_path)
         wb = Workbook()
         ws = wb.active
-        ws.title = "Test Report"
+        ws.title = f"Test Report_{region}"
         ws.append(["Region", "Country", "City", "Total Sales", "Total Profit", "Total Sales DB", "Total Profit DB",
                    "Sales BI vs DB", "Profit BI vs DB"])
-        row_no = 0
-        row_no = row_no + 1
+        row_no = row_no
         region = region
         country = country
         city = city
@@ -72,8 +71,8 @@ def test_run(region,country,city):
             time.sleep(5)
             e.locator("(//span[@class='glyphicon checkbox checkboxOutline'])[1]").click()
 
-        time.sleep(3)
-        page.screenshot(path=f"reports/debug_{row_no}.png")
+        time.sleep(10)
+        page.screenshot(path=f"reports/debug_{region}.png")
         totalSales = float(
             page.locator("(//div[@class='visualWrapper report'])[2]").text_content().replace("Total Sales",
                                                                                              "").replace(",",
@@ -90,6 +89,9 @@ def test_run(region,country,city):
         # ws.append(
         #     [region, country, city, totalSales, totalProfit, results[0][2], results[0][3], f"=D{row_no}=F{row_no}",
         #      f"=E{row_no}=G{row_no}"])
+        ws.append(
+                [region, country, city, totalSales, totalProfit, 0, 0, f"=D{row_no}=F{row_no}",
+                  f"=E{row_no}=G{row_no}"])
 
         # assert Decimal(str(totalSales)) == Decimal(results[0][2])
         # assert Decimal(str(totalProfit)) == Decimal(results[0][3])
