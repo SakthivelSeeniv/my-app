@@ -1,0 +1,58 @@
+import re
+from playwright.sync_api import Playwright, sync_playwright, expect
+
+
+def run(playwright: Playwright) -> None:
+    browser = playwright.chromium.launch(headless=False)
+    context = browser.new_context()
+    page = context.new_page()
+    page.goto("https://app.fabric.microsoft.com/singleSignOn?experience=fabric-developer&ru=https%3A%2F%2Fapp.fabric.microsoft.com%2Fhome%3Fexperience%3Dfabric-developer%26noSignUpCheck%3D1")
+    page.get_by_role("textbox", name="Enter email").click()
+    page.get_by_role("textbox", name="Enter email").fill("sakthivel.seeniv@tigeranalytics.com")
+    page.get_by_role("button", name="Submit").click()
+    page.goto("https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=871c010f-5e61-4fb1-83ac-98610a7e9110&scope=https%3A%2F%2Fanalysis.windows.net%2Fpowerbi%2Fapi%2F.default%20openid%20profile%20offline_access&redirect_uri=https%3A%2F%2Fapp.fabric.microsoft.com%2Fsignin&client-request-id=019b731c-cc89-748a-8120-658923a32a34&response_mode=fragment&response_type=code&x-client-SKU=msal.js.browser&x-client-VER=3.28.0&client_info=1&code_challenge=3WQXNVG-zY38zgdHlWO8-RqvBPwg9OdMmYfUzNlh02c&code_challenge_method=S256&nonce=019b731c-cc8b-769a-bc51-7afc1820afac&state=eyJpZCI6IjAxOWI3MzFjLWNjOGEtNzNjMi05YzYxLThmMDg5Y2QzZmQ1NiIsIm1ldGEiOnsiaW50ZXJhY3Rpb25UeXBlIjoicmVkaXJlY3QifX0%3D%7C1767162825863.0999%3B1767162825864.5999%3B1767162825584.4&site_id=500453&nux=1&login_hint=sakthivel.seeniv@tigeranalytics.com&msafed=0")
+    page.get_by_role("textbox", name="Enter the password for").click()
+    page.get_by_role("textbox", name="Enter the password for").fill("Tiger#1234")
+    #page.get_by_role("textbox", name="Enter the password for").press("Enter")
+    page.get_by_role("button", name="Sign in").click()
+    page.get_by_role("button", name="Yes").click()
+    page.goto("https://app.fabric.microsoft.com/home?experience=fabric-developer")
+    page.get_by_test_id("navbar-label-item-workspaces").click()
+    page.get_by_test_id("workspace-item-btn").click()
+    # page.get_by_test_id("import-button").click()
+    # page.get_by_role("menuitem", name="Report, Paginated Report or").click()
+    # page.get_by_test_id("Local").click()
+    # page.get_by_test_id("import-button").set_input_files("Sales Dashboard Copy.pbix")
+    page.get_by_test_id("keyword-search-filter").get_by_test_id("tri-search-box").click()
+    page.get_by_test_id("keyword-search-filter").get_by_test_id("tri-search-box").fill("Sales")
+    page.get_by_test_id("keyword-search-filter").get_by_test_id("tri-search-box").press("Enter")
+    page.get_by_test_id("keyword-search-filter").get_by_test_id("tri-search-box").click()
+    page.get_by_test_id("keyword-search-filter").get_by_test_id("tri-search-box").press("Enter")
+    page.get_by_role("cell", name="Sales Dashboard Share").get_by_test_id("item-name").click()
+    page.get_by_role("button", name="Region Expand or collapse").click()
+    page.get_by_role("textbox", name="Search", exact=True).click()
+    page.get_by_role("textbox", name="Search", exact=True).fill("Asia")
+    page.locator(".glyphicon.checkbox").click()
+    page.get_by_role("button", name="Region Expand or collapse").click()
+    page.get_by_role("button", name="Country Expand or collapse").click()
+    page.get_by_role("textbox", name="Search", exact=True).click()
+    page.get_by_role("textbox", name="Search", exact=True).fill("India")
+    page.locator("filter:nth-child(2) > .card > .filterContent > div:nth-child(2) > filter-visual > .filterVisualModern > .ng-star-inserted > .visual > .slicer-container > .slicer-content-wrapper > .slicerContainer > .slicerBody > .scroll-wrapper > .scrollbar-inner > .scrollRegion > .visibleGroup > .row > .slicerItemContainer > .slicerCheckbox > .glyphicon").click()
+    page.get_by_role("button", name="Country Expand or collapse").click()
+    page.get_by_role("button", name="City Expand or collapse").click()
+    page.get_by_role("textbox", name="Search", exact=True).click()
+    page.get_by_role("textbox", name="Search", exact=True).fill("Mumbai")
+    page.locator("filter:nth-child(3) > .card > .filterContent > div:nth-child(2) > filter-visual > .filterVisualModern > .ng-star-inserted > .visual > .slicer-container > .slicer-content-wrapper > .slicerContainer > .slicerBody > .scroll-wrapper > .scrollbar-inner > .scrollRegion > .visibleGroup > .row > .slicerItemContainer > .slicerCheckbox > .glyphicon").click()
+    page.get_by_role("button", name="City Expand or collapse").click()
+    page.get_by_text("Total Sales188,844.19").click()
+    page.get_by_text("Total Profit105,574.40").click()
+    page.get_by_test_id("reset-to-default-btn").click()
+    page.get_by_test_id("dailog-ok-btn").click()
+
+    # ---------------------
+    context.close()
+    browser.close()
+
+
+with sync_playwright() as playwright:
+    run(playwright)
