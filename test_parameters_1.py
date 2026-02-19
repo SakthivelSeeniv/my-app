@@ -22,7 +22,7 @@ import pytest_check as check
 @pytest.mark.parametrize("region,country,city",[("Asia","India","Mumbai"),("Asia","China","Beijing"),("Europe","Germain","Berlin")])
 def test_run(region,country,city):
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False)  # Set True for headless mode
+        browser = p.chromium.launch(headless=True)  # Set True for headless mode
         page = browser.new_page()
 
         page.goto("https://app.fabric.microsoft.com/home?experience=fabric-developer")
