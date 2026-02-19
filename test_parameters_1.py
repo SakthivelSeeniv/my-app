@@ -73,6 +73,7 @@ def test_run(region,country,city):
             e.locator("(//span[@class='glyphicon checkbox checkboxOutline'])[1]").click()
 
         time.sleep(3)
+        page.screenshot(path="reports/debug.png")
         totalSales = float(
             page.locator("(//div[@class='visualWrapper report'])[2]").text_content().replace("Total Sales",
                                                                                              "").replace(",",
